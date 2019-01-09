@@ -1,0 +1,1 @@
+Practice from book "Thinking Functionally with Haskell"
