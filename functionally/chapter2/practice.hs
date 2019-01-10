@@ -8,8 +8,19 @@ modernise title = unwords (map (\t -> toUpper (head t): map toLower (tail t)) (w
 
 -- head (map f xs) Beaver count n times, Susan count 1 time
 
+first :: (a -> Bool) -> [a] -> a
+first p xs 
+    |null xs   = error "Empty list"
+    |p x       = x
+    |otherwise = first p (tail xs)
+    where x = head xs 
+
 -- Practice E
 
+first1 p xs
+    |null ys = Nothing
+    |otherwise = Just (head ys)
+    where ys   = filter p xs
 -- Practice F
 
 -- exp x n
