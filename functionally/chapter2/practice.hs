@@ -6,6 +6,8 @@ modernise title = unwords (map (\t -> toUpper (head t): map toLower (tail t)) (w
 
 -- Practice D
 
+-- head (map f xs) Beaver count n times, Susan count 1 time
+
 -- Practice E
 
 -- Practice F
