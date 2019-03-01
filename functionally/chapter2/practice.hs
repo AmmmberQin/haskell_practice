@@ -59,3 +59,14 @@ addSum cin = cin ++ (show (sum (map (\t -> (read [t] :: Int)) cin)))
 valid :: CIN -> Bool
 valid n = (sum (map (\t -> (read [t] :: Int)) (take 8 n))) == (read (drop 8 n) :: Int)
 -- Practice I
+
+palindrome :: IO()
+palindrome
+  = do {putStrLn "Enter a String:";
+        xs <- getLine;
+        if isPalidrome1 xs then putStrLn "Yes!"
+        else putStrLn "No!"}
+
+isPalidrome1 :: String -> Bool
+isPalidrome1 xs = (ys == reverse ys)
+    where ys = map toLower (filter isAlpha xs)
