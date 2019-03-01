@@ -62,6 +62,7 @@ valid n = (sum (map (\t -> (read [t] :: Int)) (take 8 n))) == (read (drop 8 n) :
 
 palindrome :: IO()
 palindrome
+<<<<<<< HEAD
   = do {putStrLn "Enter a String:";
         xs <- getLine;
         if isPalidrome1 xs then putStrLn "Yes!"
@@ -70,3 +71,14 @@ palindrome
 isPalidrome1 :: String -> Bool
 isPalidrome1 xs = (ys == reverse ys)
     where ys = map toLower (filter isAlpha xs)
+=======
+ = do {putStrLn "Enter a string:";
+       xs <- getLine;
+       if isPalindrome xs then putStrLn "Yes!"
+       else putStrLn "No!"
+}
+
+isPalindrome :: String -> Bool
+isPalindrome xs = (ys == reverse ys)
+    where ys = map toLower (filter isAlpha xs)
+>>>>>>> 4285002c0d17fbe2eb22da5f8cbb592a52f70065

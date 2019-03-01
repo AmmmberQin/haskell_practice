@@ -2,7 +2,7 @@ Practice from book "Thinking Functionally with Haskell"
 
 - [x] 1  What is functional programming
 - [x] 2  Expressions, types and values
-- [ ] 3  NUmbers
+- [x] 3  NUmbers
 - [ ] 4  Lists
 - [ ] 5  A simple Sudoku solver
 - [ ] 6  Proofs
