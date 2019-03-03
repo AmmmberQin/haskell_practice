@@ -1,3 +1,5 @@
+module Excerise5 where
+
 import Test.HUnit
 import Data.List 
 import Data.Char
@@ -167,10 +169,10 @@ duplicate s n
   | n == 1 = s
   | otherwise = s ++ (duplicate s (n-1))
 
-pushRight :: String -> Integer -> String
-pushRight s n
+pushRight :: String -> Integer -> String-> String
+pushRight s n f
   | (toInteger (length s))>=n = drop ((length s)-(fromIntegral n)) s
-  | otherwise = " " ++ (pushRight s (n-1))
+  | otherwise = f ++ (pushRight s (n-1) f)
 
 fib n
   | n == 0 = 0
@@ -179,5 +181,5 @@ fib n
 
 fibTable :: Integer -> String
 fibTable n
-  | n < 0 = "n" ++ (pushRight "fib n" 16) ++ "\n"
-  | otherwise = (fibTable (n-1)) ++ (show n) ++ (pushRight (show (fib n)) 16) ++ "\n"
+  | n < 0 = "n" ++ (pushRight "fib n" 16 " ") ++ "\n"
+  | otherwise = (fibTable (n-1)) ++ (show n) ++ (pushRight (show (fib n)) 16 " ") ++ "\n"
