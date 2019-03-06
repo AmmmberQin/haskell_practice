@@ -1,7 +1,7 @@
 -- @Author: ariesduanmu
 -- @Date:   2019-03-06 01:36:11
 -- @Last Modified by:   ariesduanmu
--- @Last Modified time: 2019-03-06 01:55:23
+-- @Last Modified time: 2019-03-07 00:58:05
 module Chapter7 where
 
 import Data.Char
@@ -138,11 +138,16 @@ reverse1 :: [a] -> [a]
 reverse1 [] = []
 reverse1 (x:xs) = reverse1 xs ++ [x]
 
+zip1 :: ([a], [b]) -> [(a, b)]
+zip1 (xs, ys) = zip xs ys
+
 unzip1 :: [(a,b)] -> ([a], [b])
 unzip1 [] = ([], [])
 unzip1 (x:xs) = (i:a, j:b)
   where (a, b) = unzip1 xs
         (i, j) = x
+
+prop_zip xs ys = unzip1 (zip1 (xs, ys)) == (xs, ys) 
 
 min1 :: [Integer] -> Integer
 min1 xs = head (iSort xs)
@@ -171,11 +176,7 @@ isSorted (x:y:ys)
 prop_is_sort xs = isSorted (iSort xs)
 prop_ins_is_sort n xs = isSorted (ins n (iSort xs))
 
-qSort :: [Integer] -> [Integer]
-qSort [] = []
-qSort (x:xs) = qSort [y|y<-xs, y<=x] ++ [x] ++ qSort [y|y<-xs, y>x]
 
-prop_qSort xs = qSort xs == sort xs
 
 drop1 :: Int -> [a] -> [a]
 drop1 0 xs = xs
@@ -186,5 +187,49 @@ drop1 _ _ = error "PreludeList.drop: negative arguments"
 
 prop_drop n xs = drop1 n xs == drop n xs
 
-splitAt1 :: Int -> [a] -> [a]
-splitAt1
+splitAt1 :: Int -> [a] -> ([a],[a])
+splitAt1 _ [] = ([],[])
+splitAt1 n xs
+  | n <= 0 = ([],xs)
+  | otherwise = ((head xs):i, j)
+  where (i,j) = splitAt1 (n-1) (tail xs)
+
+prop_split n xs = splitAt1 n xs == splitAt n xs
+
+
+qSort :: [Integer] -> [Integer]
+qSort [] = []
+qSort (x:xs) = qSort [y | y<-xs, y<=x] ++ [x] ++ qSort [y | y<-xs, y>x]
+
+prop_qSort xs = qSort xs == sort xs
+
+qRSort :: [Integer] -> [Integer]
+qRSort [] = []
+qRSort (x:xs) = qRSort [y | y<-xs, y>=x] ++ [x] ++ qRSort [y | y<-xs, y<x]
+
+prop_qRSort xs = qRSort xs == reverse (sort xs)
+
+qDSort :: [Integer] -> [Integer]
+qDSort [] = []
+qDSort (x:xs) = qDSort [y | y<-xs, y<x] ++ [x] ++ qDSort [y | y<-xs, y>x]
+
+prop_qDSort xs = qDSort xs == sort (removeDuplicates xs)
+
+
+subList :: String -> String -> Bool
+
+subList [] [] = True
+subList _ [] = False
+subList [] _ = True
+subList (x:xs) (y:ys)
+  | x == y = subList xs ys
+  | otherwise = subList (x:xs) ys
+
+subString :: String -> String -> Bool
+
+subString [] [] = True
+subString _ [] = False
+subString [] _ = False
+subString x (y:ys)
+  | (take (length x) (y:ys)) == x = True
+  | otherwise = subString x ys
