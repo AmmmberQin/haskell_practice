@@ -1,13 +1,14 @@
 -- @Author: ariesduanmu
 -- @Date:   2019-03-06 01:36:11
 -- @Last Modified by:   ariesduanmu
--- @Last Modified time: 2019-03-07 00:58:05
+-- @Last Modified time: 2019-03-11 01:32:42
 module Chapter7 where
 
 import Data.Char
 import Data.List
 import Test.QuickCheck
 import Test.HUnit
+import Prelude hiding (Word, getLine)
 
 digits :: String -> String
 digits st = [ch | ch <- st, isDigit ch]
@@ -233,3 +234,79 @@ subString [] _ = False
 subString x (y:ys)
   | (take (length x) (y:ys)) == x = True
   | otherwise = subString x ys
+
+
+whitespace = ['\n','\t',' ']
+
+getWord :: String -> String
+getWord [] = []
+getWord (x:xs)
+  | elem x whitespace = []
+  | otherwise = x:getWord xs
+
+dropWord :: String -> String
+dropWord [] = []
+dropWord (x:xs)
+  | elem x whitespace = (x:xs)
+  | otherwise = dropWord xs
+
+dropSpace :: String -> String
+dropSpace [] = []
+dropSpace (x:xs)
+  | elem x whitespace = dropSpace xs
+  | otherwise = (x:xs)
+
+type Word = String
+
+splitWords :: String -> [Word]
+splitWords st = split (dropSpace st)
+
+split :: String -> [Word]
+split [] = []
+split st = (getWord st) : split (dropSpace (dropWord st))
+
+type Line = [Word]
+
+getLine :: Int -> [Word] -> Line
+
+getLine len [] = []
+getLine len (w:ws)
+  | length w <= len = w : getLine (len - (length w + 1)) ws
+  | otherwise = []
+
+dropLine :: Int -> [Word] -> Line
+dropLine len [] = []
+dropLine len (w:ws)
+  | length w <= len = dropLine (len - (length w + 1)) ws
+  | otherwise = (w:ws)
+
+lineLen = 20
+splitLines :: [Word] -> [Line]
+splitLines [] = []
+splitLines ws = getLine lineLen ws : splitLines (dropLine lineLen ws)
+
+
+fill :: String -> [Line]
+fill = splitLines.splitWords
+
+joinLine :: Line -> String
+joinLine [] = ""
+joinLine (x:xs)
+  | xs == [] = x
+  | otherwise = x ++ " " ++ joinLine xs
+
+joinLines :: [Line] -> String
+joinLines [] = ""
+joinLines (x:xs)
+  | xs == [] = joinLine x
+  | otherwise = joinLine x ++ "\n" ++ joinLines xs
+
+isPalin :: String -> Bool
+isPalin st = alphaS == reverse alphaS
+  where alphaS = [toLower s | s <- st, isAlpha s]
+
+subst :: String -> String -> String -> String
+subst oldSub newSub st
+  | s == oldSub = newSub++(dropWord (dropSpace st))
+  | otherwise = s ++ " " ++ (subst oldSub newSub (dropWord st))
+  where s = getWord (dropSpace st)
