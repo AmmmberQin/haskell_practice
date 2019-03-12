@@ -1,12 +1,14 @@
 -- @Author: ariesduanmu
 -- @Date:   2019-03-11 22:18:42
 -- @Last Modified by:   ariesduanmu
--- @Last Modified time: 2019-03-12 01:21:18
+-- @Last Modified time: 2019-03-13 01:43:29
 import System.Random
 import Data.Array.IO
 import Control.Monad
-import Prelude hiding (putStrLn)
+import Prelude hiding (putStrLn, cycle)
 import Data.Char
+import Data.List hiding (cycle)
+import Test.QuickCheck
 
 data Move = Rock | Paper | Scissors deriving (Show, Eq)
 type Tournament = ([Move], [Move])
@@ -119,7 +121,7 @@ getInt = do line <- getLine
 isPalindrome :: IO()
 isPalindrome
   = do str <- getLine
-       if str == reverse str
+       if [toLower s | s<-str, isAlpha s] == reverse [toLower s | s<-str, isAlpha s]
           then putStrLn "Good job"
           else putStrLn "NO"
 
@@ -145,3 +147,120 @@ sumN :: IO Integer
 sumN = do putStr "How many numbers you wanna input: "
           n <- getLine
           addN (read n :: Integer) 0
+
+copy :: IO()
+copy = 
+  do line <- getLine
+     putStrLn line
+     copy
+
+copyN :: Integer -> IO()
+copyN n =
+  if n<=0
+    then return ()
+    else do line <- getLine
+            putStrLn line
+            copyN (n-1)
+
+copyEmpty :: IO()
+copyEmpty =
+  do line <- getLine
+     if line == ""
+        then return ()
+        else do putStrLn line
+                copyEmpty
+
+copyCount :: Integer -> IO()
+copyCount n =
+  do line <- getLine
+     if line == ""
+        then putStrLn (show n ++ " lines copied.")
+        else do putStrLn line
+                copyCount (n+1)
+
+copyInfo :: Int -> Int -> Int -> IO()
+copyInfo lines words chars = 
+  do line <- getLine
+     if line == ""
+        then putStrLn (show lines ++ " " ++ show words ++ " " ++ show chars)
+        else do copyInfo (lines+1) (words+(length [l | l <- line, l==' '] + 1)) (chars+(length line))
+
+
+wc :: IO()
+wc = copyInfo 0 0 0
+
+numberList :: Integer -> IO()
+numberList n = 
+  do line <- getLine
+     if line == "" || not (all (isNumber) line)
+        then numberList n
+        else do
+             if line=="0"
+                then putStrLn ("Sum is: " ++ show n)
+                else numberList (n+(read line :: Integer))
+
+numberSortList :: [Integer] -> IO()
+numberSortList list =
+  do line <- getLine
+     if line == "" || not (all (isNumber) line)
+        then numberSortList list
+        else do
+             if line=="0"
+                then putStrLn ("Sorted List is: " ++ (show list))
+                else numberSortList (mergeSort list (read line :: Integer))
+
+slice :: Int -> Int -> [Integer] -> [Integer]
+slice from to xs = take (to-from+1) (drop from xs)
+
+mergeSort :: [Integer] -> Integer -> [Integer]
+mergeSort [] n = [n]
+mergeSort (x:[]) n = [a,b]
+  where a = min x n
+        b = max x n
+mergeSort list n
+  | n <= mid = (mergeSort (take m list) n) ++ (drop m list)
+  | otherwise = (take m list) ++ (mergeSort (drop m list) n)
+  where m = div (length list) 2
+        mid = list!!m
+
+
+prop_mergeSort xs k = mergeSort (sort xs) k == sort (k:xs)
+
+play :: Strategy -> IO()
+play strategy = 
+  playInteractive strategy ([], [])
+
+playInteractive :: Strategy -> Tournament -> IO()
+playInteractive s t@(mine, yours) = 
+  do
+    ch <- getChar
+    if not (ch `elem` "rpsRPS")
+      then showResults t
+      else do let next = s yours
+              putStrLn ("\nI play: " ++ show next ++
+                        " you play: " ++ [ch])
+              let yourMove = convertMove ch
+              playInteractive s (next:mine, yourMove:yours)
+
+convertMove :: Char -> Move
+convertMove c = 
+  case toLower c of
+    'r' -> Rock
+    'p' -> Paper
+    's' -> Scissors
+
+showResults :: Tournament -> IO()
+showResults t 
+  | r > 0 = putStrLn "I won!"
+  | r == 0 = putStrLn "Draw"
+  | otherwise = putStrLn "You won: well done!"
+  where r = tournamentOutcome t
+
+playSvsS :: Strategy -> Strategy -> Integer -> Tournament
+playSvsS strategyA strategyB 0 = ([],[])
+playSvsS strategyA strategyB n = step strategyA strategyB (playSvsS strategyA strategyB (n-1))
+
+
+step :: Strategy -> Strategy -> Tournament -> Tournament
+step strategyA strategyB (movesA, movesB) = 
+  (strategyA movesB : movesA, strategyB movesA : movesB)
