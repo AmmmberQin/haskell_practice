@@ -1,7 +1,9 @@
 -- @Author: ariesduanmu
 -- @Date:   2019-03-11 22:18:42
 -- @Last Modified by:   ariesduanmu
--- @Last Modified time: 2019-03-13 01:43:29
+-- @Last Modified time: 2019-03-17 18:15:42
+module Excerise8 where
+
 import System.Random
 import Data.Array.IO
 import Control.Monad
