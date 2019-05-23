@@ -1,0 +1,13 @@
+[H-99: Ninety-Nine Haskell Problems](https://wiki.haskell.org/H-99:_Ninety-Nine_Haskell_Problems)
+
+- [ ] [Questions 1 to 10: Lists](https://wiki.haskell.org/99_questions/1_to_10)
+- [ ] [Questions 11 to 20: Lists, continued](https://wiki.haskell.org/99_questions/11_to_20)
+- [ ] [Questions 21 to 28: Lists again](https://wiki.haskell.org/99_questions/21_to_28)
+- [ ] [Questions 31 to 41: Arithmetic](https://wiki.haskell.org/99_questions/31_to_41)
+- [ ] [Questions 46 to 50: Logic and codes](https://wiki.haskell.org/99_questions/46_to_50)
+- [ ] [Questions 54A to 60: Binary trees](https://wiki.haskell.org/99_questions/54A_to_60)
+- [ ] [Questions 61 to 69: Binary trees, continued](https://wiki.haskell.org/99_questions/61_to_69)
+- [ ] [Questions 70B to 73: Multiway trees](https://wiki.haskell.org/99_questions/70B_to_73)
+- [ ] [Questions 80 to 89: Graphs](https://wiki.haskell.org/99_questions/80_to_89)
+- [ ] [Questions 90 to 94: Miscellaneous problems](https://wiki.haskell.org/99_questions/90_to_94)
+- [ ] [Questions 95 to 99: Miscellaneous problems, continued](https://wiki.haskell.org/99_questions/95_to_99)
